@@ -1,19 +1,23 @@
-`use strict`;
+'use strict';
 
 const filters = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
 const filterContainer = document.querySelector(`.main__filter`);
 filterContainer.innerHTML = ``;
 
-const boardTasks = document.querySelector('.board__tasks');
+const boardTasks = document.querySelector(`.board__tasks`);
 boardTasks.innerHTML = ``;
 
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 
-const drawFilter = function(name, state = ``) {
+const drawFilter = function (name, state = ``) {
   const count = getRandomInt(0, 150);
 
+  if (!filterContainer.hasChildNodes()) {
+    state = `checked`;
+  }
+
   if (count === 0) {
-    state = disabled;
+    state = `disabled`;
   }
 
   const newFilter = `<input
@@ -27,8 +31,8 @@ const drawFilter = function(name, state = ``) {
     ${name} <span class="filter__${name}-count">${count}</span></label
   >`;
 
-  filterContainer.innerHTML += newFilter;
-}
+  filterContainer.insertAdjacentHTML(`beforeend`, newFilter);
+};
 
 const cardsData = [
   {
@@ -46,7 +50,7 @@ const cardsData = [
     date: ``,
     deadline: ``,
     hashtags: [`#repeat`, `#cinema`, `#entertaiment`],
-    src:``,
+    src: ``,
     alt: ``
   },
   {
@@ -55,7 +59,7 @@ const cardsData = [
     date: ``,
     deadline: ``,
     hashtags: [`#repeat`, `#cinema`, `#entertaiment`],
-    src:``,
+    src: ``,
     alt: ``
   },
   {
@@ -64,7 +68,7 @@ const cardsData = [
     date: `23 SEPTEMBER`,
     deadline: `11:15 PM`,
     hashtags: [`#repeat`, `#cinema`, `#entertaiment`],
-    src:`img/sample-img.jpg`,
+    src: `img/sample-img.jpg`,
     alt: `task picture`
   },
   {
@@ -73,7 +77,7 @@ const cardsData = [
     date: ``,
     deadline: ``,
     hashtags: [`#repeat`, `#cinema`, `#entertaiment`],
-    src:``,
+    src: ``,
     alt: ``
   },
   {
@@ -82,7 +86,7 @@ const cardsData = [
     date: ``,
     deadline: ``,
     hashtags: [`#repeat`, `#cinema`, `#entertaiment`],
-    src:`img/sample-img.jpg`,
+    src: `img/sample-img.jpg`,
     alt: `task picture`
   },
   {
@@ -111,14 +115,19 @@ const createHashtag = (hashtag) => `<span class="card__hashtag-inner">
     </button>
   </span>`;
 
-const drawCard = function(card) {
+const drawCard = function (card) {
   let mods = ``;
-  card.modificators.forEach((mod) => mods += `card--${mod} `);
+
+  card.modificators.forEach((mod) => {
+    mods += `card--${mod} `;
+  });
 
   let hashtagsHTML = ``;
 
   if (card.hashtags.length > 0) {
-    card.hashtags.forEach((ht) => hashtagsHTML += createHashtag(ht));
+    card.hashtags.forEach((ht) => {
+      hashtagsHTML += createHashtag(ht);
+    });
   }
 
   let noImg = `--empty`;
@@ -126,7 +135,7 @@ const drawCard = function(card) {
     noImg = ``;
   }
 
-  boardTasks.innerHTML += `<article class="card ${mods}">
+  const newCard = `<article class="card ${mods}">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__control">
@@ -373,7 +382,23 @@ const drawCard = function(card) {
       </div>
     </form>
   </article>`;
+
+  boardTasks.insertAdjacentHTML(`beforeend`, newCard);
+};
+
+const onFilterClick = function () {
+  let count = getRandomInt(0, 10);
+  boardTasks.innerHTML = ``;
+  for (let i = 0; i <= count; i++) {
+    drawCard(cardsData[0]);
+  }
 };
 
 filters.forEach((filter) => drawFilter(filter));
 cardsData.forEach((cd) => drawCard(cd));
+
+const filtersList = filterContainer.querySelectorAll(`.filter__label`);
+
+filtersList.forEach(function (filterItem) {
+  filterItem.addEventListener(`click`, onFilterClick);
+});
