@@ -1,38 +1,10 @@
 'use strict';
 
-const filters = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
 const filterContainer = document.querySelector(`.main__filter`);
-filterContainer.innerHTML = ``;
-
 const boardTasks = document.querySelector(`.board__tasks`);
-boardTasks.innerHTML = ``;
 
-const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min;
-
-const drawFilter = function (name, state = ``) {
-  const count = getRandomInt(0, 150);
-
-  if (!filterContainer.hasChildNodes()) {
-    state = `checked`;
-  }
-
-  if (count === 0) {
-    state = `disabled`;
-  }
-
-  const newFilter = `<input
-    type="radio"
-    id="filter__${name}"
-    class="filter__input visually-hidden"
-    name="filter"
-    ${state}
-  />
-  <label for="filter__${name}" class="filter__label">
-    ${name} <span class="filter__${name}-count">${count}</span></label
-  >`;
-
-  filterContainer.insertAdjacentHTML(`beforeend`, newFilter);
-};
+const filters = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
+const filtersCount = [`5`, `13`, `154`, `19`, `0`, `47`, `63`];
 
 const cardsData = [
   {
@@ -99,6 +71,36 @@ const cardsData = [
     alt: `task picture`
   }
 ];
+
+let newFiltersList = ``;
+let newCardsList = ``;
+
+const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+
+const drawFilter = function (name, count, state = ``) {
+  // const count = getRandomInt(0, 150);
+
+  if (newFiltersList.length === 0) {
+    state = `checked`;
+  }
+
+  if (count === `0`) {
+    state = `disabled`;
+  }
+
+  const newFilter = `<input
+    type="radio"
+    id="filter__${name}"
+    class="filter__input visually-hidden"
+    name="filter"
+    ${state}
+  />
+  <label for="filter__${name}" class="filter__label">
+    ${name} <span class="filter__${name}-count">${count}</span></label
+  >`;
+
+  newFiltersList += newFilter;
+};
 
 const createHashtag = (hashtag) => `<span class="card__hashtag-inner">
     <input
@@ -383,22 +385,33 @@ const drawCard = function (card) {
     </form>
   </article>`;
 
-  boardTasks.insertAdjacentHTML(`beforeend`, newCard);
+  newCardsList += newCard;
 };
 
 const onFilterClick = function () {
   let count = getRandomInt(0, 10);
+  newCardsList = ``;
   boardTasks.innerHTML = ``;
-  for (let i = 0; i <= count; i++) {
+
+  for (let i = 0; i < count; i++) {
     drawCard(cardsData[0]);
   }
+
+  boardTasks.insertAdjacentHTML(`beforeend`, newCardsList);
 };
 
-filters.forEach((filter) => drawFilter(filter));
-cardsData.forEach((cd) => drawCard(cd));
+filterContainer.innerHTML = ``;
+boardTasks.innerHTML = ``;
+
+filters.forEach((filter) => {
+  let i = filters.indexOf(filter);
+  drawFilter(filter, filtersCount[i]);
+});
+filterContainer.insertAdjacentHTML(`beforeend`, newFiltersList);
 
 const filtersList = filterContainer.querySelectorAll(`.filter__label`);
 
-filtersList.forEach(function (filterItem) {
-  filterItem.addEventListener(`click`, onFilterClick);
-});
+filtersList.forEach((filterItem) => filterItem.addEventListener(`click`, onFilterClick));
+
+cardsData.forEach((cd) => drawCard(cd));
+boardTasks.insertAdjacentHTML(`beforeend`, newCardsList);
