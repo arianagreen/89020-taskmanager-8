@@ -98,7 +98,7 @@ const onFilterClick = function () {
 
   const tasks = new Array(count)
     .fill()
-    .map(makeCard(cardsData[0]));
+    .map(() => makeCard(cardsData[0]));
   boardTasks.insertAdjacentHTML(`beforeend`, tasks.join(``));
 };
 
