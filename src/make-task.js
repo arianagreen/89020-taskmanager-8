@@ -1,4 +1,4 @@
-const createHashtag = (hashtag) => `<span class="card__hashtag-inner">
+const createTag = (tag) => `<span class="card__hashtag-inner">
     <input
       type="hidden"
       name="hashtag"
@@ -6,34 +6,34 @@ const createHashtag = (hashtag) => `<span class="card__hashtag-inner">
       class="card__hashtag-hidden-input"
     />
     <button type="button" class="card__hashtag-name">
-      ${hashtag}
+      ${`#` + tag}
     </button>
     <button type="button" class="card__hashtag-delete">
       delete
     </button>
   </span>`;
 
-export default (card) => {
-  let mods = ``;
+export default (task) => {
+  // let mods = ``;
+  //
+  // task.modificators.forEach((mod) => {
+  //   mods += `task--${mod} `;
+  // });
 
-  card.modificators.forEach((mod) => {
-    mods += `card--${mod} `;
-  });
+  let tagsHTML = ``;
 
-  let hashtagsHTML = ``;
-
-  if (card.hashtags.length > 0) {
-    card.hashtags.forEach((ht) => {
-      hashtagsHTML += createHashtag(ht);
+  if (task.tags.size > 0) {
+    task.tags.forEach((ht) => {
+      tagsHTML += createTag(ht);
     });
   }
 
   let noImg = `--empty`;
-  if (card.src.length > 0) {
+  if (task.picture.length > 0) {
     noImg = ``;
   }
 
-  return `<article class="card ${mods}">
+  return `<article class="card card--black">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__control">
@@ -63,7 +63,7 @@ export default (card) => {
               class="card__text"
               placeholder="Start typing your text here..."
               name="text"
-            >${card.text}</textarea>
+            >${task.title}</textarea>
           </label>
         </div>
 
@@ -79,7 +79,7 @@ export default (card) => {
                   <input
                     class="card__date"
                     type="text"
-                    placeholder="${card.date}"
+                    placeholder="${new Date(task.dueDate).getDate() + ` ` + new Date(task.dueDate).getMonth()}"
                     name="date"
                   />
                 </label>
@@ -87,7 +87,7 @@ export default (card) => {
                   <input
                     class="card__time"
                     type="text"
-                    placeholder="${card.time}"
+                    placeholder="${new Date(task.dueDate).getTime()}"
                     name="time"
                   />
                 </label>
@@ -178,7 +178,7 @@ export default (card) => {
 
             <div class="card__hashtag">
               <div class="card__hashtag-list">
-                ${hashtagsHTML}
+                ${tagsHTML}
               </div>
 
               <label>
@@ -199,8 +199,8 @@ export default (card) => {
               name="img"
             />
             <img
-              src="${card.src}"
-              alt="${card.alt}"
+              src="${task.picture}"
+              alt="task picture"
               class="card__img"
             />
           </label>
