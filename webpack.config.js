@@ -16,7 +16,7 @@ module.exports = {
   },
   devServer: {
     contentBase: path.join(__dirname, `public`), // Где искать сборку
-    publicPath: 'http:!//localhost:8080/webpack-dev-server/', // Веб адрес сборки
+    publicPath: 'http://localhost:8080/', // Веб адрес сборки
     compress: true, // Сжатие
     watchContentBase: true
   }

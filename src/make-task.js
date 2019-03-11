@@ -19,6 +19,26 @@ export default (task) => {
   // task.modificators.forEach((mod) => {
   //   mods += `task--${mod} `;
   // });
+  const hasDate = task.dueDate ? `` : `disabled`;
+
+  // const dateOptions = {
+  //   day: `numeric`,
+  //   month: `long`
+  // };
+
+  const timeOptions = {
+    hour: `numeric`,
+    minute: `numeric`,
+    hour12: true
+  };
+
+  let isRepeating = false;
+
+  for (const day in task.repeatingDays) {
+    if (task.repeatingDays[day] === true) {
+      isRepeating = true;
+    }
+  }
 
   let tagsHTML = ``;
 
@@ -33,7 +53,7 @@ export default (task) => {
     noImg = ``;
   }
 
-  return `<article class="card card--black">
+  return `<article class="card card--${task.color}">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__control">
@@ -74,12 +94,12 @@ export default (task) => {
                 date: <span class="card__date-status">no</span>
               </button>
 
-              <fieldset class="card__date-deadline" disabled>
+              <fieldset class="card__date-deadline" ${hasDate}>
                 <label class="card__input-deadline-wrap">
                   <input
                     class="card__date"
                     type="text"
-                    placeholder="${new Date(task.dueDate).getDate() + ` ` + new Date(task.dueDate).getMonth()}"
+                    placeholder="${task.dueDate.toLocaleString(`en`, {day: `numeric`})}&nbsp;${task.dueDate.toLocaleString(`en`, {month: `long`})}"
                     name="date"
                   />
                 </label>
@@ -87,7 +107,7 @@ export default (task) => {
                   <input
                     class="card__time"
                     type="text"
-                    placeholder="${new Date(task.dueDate).getTime()}"
+                    placeholder="${task.dueDate.toLocaleString(`ru`, timeOptions)}"
                     name="time"
                   />
                 </label>
@@ -97,7 +117,7 @@ export default (task) => {
                 repeat:<span class="card__repeat-status">no</span>
               </button>
 
-              <fieldset class="card__repeat-days" disabled>
+              <fieldset class="card__repeat-days" ${isRepeating ? `` : `disabled`}>
                 <div class="card__repeat-days-inner">
                   <input
                     class="visually-hidden card__repeat-day-input"
@@ -105,6 +125,7 @@ export default (task) => {
                     id="repeat-mo-5"
                     name="repeat"
                     value="mo"
+                    ${task.repeatingDays[`mo`] ? `checked` : ``}
                   />
                   <label class="card__repeat-day" for="repeat-mo-5"
                     >mo</label
@@ -115,7 +136,7 @@ export default (task) => {
                     id="repeat-tu-5"
                     name="repeat"
                     value="tu"
-                    checked
+                    ${task.repeatingDays[`tu`] ? `checked` : ``}
                   />
                   <label class="card__repeat-day" for="repeat-tu-5"
                     >tu</label
@@ -126,6 +147,7 @@ export default (task) => {
                     id="repeat-we-5"
                     name="repeat"
                     value="we"
+                    ${task.repeatingDays[`we`] ? `checked` : ``}
                   />
                   <label class="card__repeat-day" for="repeat-we-5"
                     >we</label
@@ -136,6 +158,7 @@ export default (task) => {
                     id="repeat-th-5"
                     name="repeat"
                     value="th"
+                    ${task.repeatingDays[`th`] ? `checked` : ``}
                   />
                   <label class="card__repeat-day" for="repeat-th-5"
                     >th</label
@@ -146,7 +169,7 @@ export default (task) => {
                     id="repeat-fr-5"
                     name="repeat"
                     value="fr"
-                    checked
+                    ${task.repeatingDays[`fr`] ? `checked` : ``}
                   />
                   <label class="card__repeat-day" for="repeat-fr-5"
                     >fr</label
@@ -157,6 +180,7 @@ export default (task) => {
                     name="repeat"
                     value="sa"
                     id="repeat-sa-5"
+                    ${task.repeatingDays[`sa`] ? `checked` : ``}
                   />
                   <label class="card__repeat-day" for="repeat-sa-5"
                     >sa</label
@@ -167,7 +191,7 @@ export default (task) => {
                     id="repeat-su-5"
                     name="repeat"
                     value="su"
-                    checked
+                    ${task.repeatingDays[`su`] ? `checked` : ``}
                   />
                   <label class="card__repeat-day" for="repeat-su-5"
                     >su</label
@@ -214,6 +238,7 @@ export default (task) => {
                 class="card__color-input card__color-input--black visually-hidden"
                 name="color"
                 value="black"
+                ${task.color === `black` ? `checked` : ``}
               />
               <label
                 for="color-black-5"
@@ -226,6 +251,7 @@ export default (task) => {
                 class="card__color-input card__color-input--yellow visually-hidden"
                 name="color"
                 value="yellow"
+                ${task.color === `yellow` ? `checked` : ``}
               />
               <label
                 for="color-yellow-5"
@@ -238,6 +264,7 @@ export default (task) => {
                 class="card__color-input card__color-input--blue visually-hidden"
                 name="color"
                 value="blue"
+                ${task.color === `blue` ? `checked` : ``}
               />
               <label
                 for="color-blue-5"
@@ -250,7 +277,7 @@ export default (task) => {
                 class="card__color-input card__color-input--green visually-hidden"
                 name="color"
                 value="green"
-                checked
+                ${task.color === `green` ? `checked` : ``}
               />
               <label
                 for="color-green-5"
@@ -263,6 +290,7 @@ export default (task) => {
                 class="card__color-input card__color-input--pink visually-hidden"
                 name="color"
                 value="pink"
+                ${task.color === `pink` ? `checked` : ``}
               />
               <label
                 for="color-pink-5"
