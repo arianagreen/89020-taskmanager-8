@@ -39,36 +39,3 @@ const tasksData = new Array(10)
   });
 
 export default tasksData;
-
-// const task = {
-//   title: [
-//     `Изучить теорию`,
-//     `Сделать домашку`,
-//     `Пройти интенсив на соточку`
-//   ][Math.floor(Math.random() * 3)],
-//   dueDate: Date.now() - 7 + Math.floor(Math.random() * 7) * 24 * 60 * 60 * 1000,
-//   tags: new Set([
-//     `homework`,
-//     `theory`,
-//     `practice`,
-//     `intensive`,
-//     `keks`,
-//     `procrastinatination`,
-//     `job`
-//   ].sort(() => {
-//     return Math.random() - 0.5;
-//   })
-//   .slice(0, 3)),
-//   picture: `//picsum.photos/100/100?r=${Math.random()}`,
-//   repeatingDays: {
-//     'mo': true,
-//     'tu': false,
-//     'we': true,
-//     'th': false,
-//     'fr': false,
-//     'sa': true,
-//     'su': false,
-//   },
-//   isFavorite: true,
-//   isDone: true
-// };

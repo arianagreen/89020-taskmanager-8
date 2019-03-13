@@ -14,17 +14,6 @@ const createTag = (tag) => `<span class="card__hashtag-inner">
   </span>`;
 
 export default (task) => {
-  // let mods = ``;
-  //
-  // task.modificators.forEach((mod) => {
-  //   mods += `task--${mod} `;
-  // });
-  const hasDate = task.dueDate ? `` : `disabled`;
-
-  // const dateOptions = {
-  //   day: `numeric`,
-  //   month: `long`
-  // };
 
   const timeOptions = {
     hour: `numeric`,
@@ -33,7 +22,6 @@ export default (task) => {
   };
 
   let isRepeating = false;
-
   for (const day in task.repeatingDays) {
     if (task.repeatingDays[day] === true) {
       isRepeating = true;
@@ -41,19 +29,13 @@ export default (task) => {
   }
 
   let tagsHTML = ``;
-
   if (task.tags.size > 0) {
-    task.tags.forEach((ht) => {
-      tagsHTML += createTag(ht);
-    });
+    for (const tag of task.tags) {
+      tagsHTML += createTag(tag);
+    }
   }
 
-  let noImg = `--empty`;
-  if (task.picture.length > 0) {
-    noImg = ``;
-  }
-
-  return `<article class="card card--${task.color}">
+  return `<article class="card card--${task.color} ${isRepeating ? `card--repeat` : ``}">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__control">
@@ -94,7 +76,7 @@ export default (task) => {
                 date: <span class="card__date-status">no</span>
               </button>
 
-              <fieldset class="card__date-deadline" ${hasDate}>
+              <fieldset class="card__date-deadline" ${task.dueDate ? `` : `disabled`}>
                 <label class="card__input-deadline-wrap">
                   <input
                     class="card__date"
@@ -216,7 +198,7 @@ export default (task) => {
             </div>
           </div>
 
-          <label class="card__img-wrap card__img-wrap${noImg}">
+          <label class="card__img-wrap ${task.picture.length > 0 ? `` : `card__img-wrap--empty`}">
             <input
               type="file"
               class="card__img-input visually-hidden"
